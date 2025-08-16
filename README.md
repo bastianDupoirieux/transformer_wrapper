@@ -7,3 +7,4 @@ Expected learning:
 * Bulding Ray wrappers around models
 * Fast-Api to query models
 
+Note to self: use a .bat file for installation of all requirements
