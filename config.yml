@@ -1,0 +1,2 @@
+tokenizer: "distilbert-base-uncased"
+model: "distilbert-base-uncased"
