@@ -9,7 +9,7 @@ import os
 # Add src to path to import from the package
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
 
-from models.review_classifier import ReviewClassifier
+from review_classifier import ReviewClassifier
 from deployment.ray_wrapper import RayDeployment
 
 def test_ray_deployment():
