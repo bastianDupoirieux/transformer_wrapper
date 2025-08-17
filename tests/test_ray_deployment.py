@@ -1,5 +1,5 @@
 """
-Test script for Ray deployment functionality.
+Test script for Ray ray_wrapper functionality.
 This file tests the RayDeployment class with the ReviewClassifier.
 """
 
@@ -17,7 +17,7 @@ def test_ray_deployment():
     
     print("🚀 Testing RayDeployment with ReviewClassifier...")
     
-    # Create deployment
+    # Create ray_wrapper
     deployment = RayDeployment(
         model_class=ReviewClassifier,
         stage="development"

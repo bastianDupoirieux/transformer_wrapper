@@ -38,7 +38,7 @@ class RayDeployment:
         # Start Ray Serve
         serve.start(detached=True)
         
-        # Create Ray Serve deployment decorator with appropriate settings
+        # Create Ray Serve ray_wrapper decorator with appropriate settings
         if self.deployment_decorator is not None:
             deployment_decorator = serve.deployment(self.deployment_decorator)
         elif self.stage == "production":
@@ -65,7 +65,7 @@ class RayDeployment:
                 }
             )
         
-        # Create the deployment class
+        # Create the ray_wrapper class
         @deployment_decorator
         class ModelDeployment:
             def __init__(self):
