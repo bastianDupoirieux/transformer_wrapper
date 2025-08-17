@@ -1,42 +1,46 @@
-from starlette.requests import Request
 
-import ray
-from ray import serve
+"""
+Test script for the ReviewClassifier model.
+This file serves as a simple tester for the model functionality.
+"""
 
-import torch
-from transformers import DistilBertForSequenceClassification, AutoTokenizer
-import yaml
+import sys
+import os
 
+# Add src to path to import from the package
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
 
+from models.review_classifier import ReviewClassifier
 
-with open('../config.yml', 'r') as stream:
-    try:
-        config = yaml.safe_load(stream)
-    except yaml.YAMLError as exc:
-        print(exc)
+def test_model():
+    """Test the ReviewClassifier model with sample texts"""
+    
+    print("🧪 Testing ReviewClassifier model...")
+    
+    # Create model instance
+    classifier = ReviewClassifier()
+    
+    # Test texts
+    test_texts = [
+        "Great place! I really enjoyed my time here, thank you for the great service!",
+        "Terrible experience. The food was cold and the service was awful.",
+        "It was okay, nothing special but not bad either.",
+        "Amazing! Best restaurant I've ever been to!"
+    ]
+    
+    print("\n📝 Running classification tests:")
+    print("=" * 50)
+    
+    for i, text in enumerate(test_texts, 1):
+        try:
+            result = classifier.classify_text(text)
+            print(f"Test {i}: {result}")
+            print(f"Text: {text[:50]}...")
+            print("-" * 30)
+        except Exception as e:
+            print(f"Test {i} failed: {e}")
+    
+    print("\n✅ Model testing completed!")
 
-tokenizer = config['tokenizer']
-model = config['model']
-
-@serve.deployment
-class ReviewClassifier:
-    def __init__(self):
-        self.tokenizer=AutoTokenizer.from_pretrained(tokenizer)
-        self.model = DistilBertForSequenceClassification.from_pretrained(model)
-
-    def classify_text(self, text):
-        encoded_input=self.tokenizer(text, return_tensors='pt')
-
-        with torch.no_grad():
-            logits = self.model(**encoded_input).logits
-
-        predicted_class_id = logits.argmax().item()
-        predicted_label = self.model.config.id2label[predicted_class_id]
-
-        return predicted_label
-
-    async def __call__(self, http_request: Request):
-        review = await http_request.json()
-        return self.classify_text(review)
-
-classifier_app = ReviewClassifier.bind()
+if __name__ == "__main__":
+    test_model()

@@ -1,0 +1,19 @@
+allowed_stages:
+  - "development"
+  - "testing"
+  - "production"
+
+default_resources:
+  num_cpus: 1
+  num_gpus: 0
+  memory: "1Gi"
+
+scaling_config:
+  min_replicas: 1
+  max_replicas: 10
+  target_num_ongoing_requests_per_replica: 10
+
+production_settings:
+  num_replicas: 2
+  health_check_timeout_s: 30
+  graceful_shutdown_wait_loop_s: 30

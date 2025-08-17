@@ -73,8 +73,35 @@ class RayDeployment:
             
             async def __call__(self, request):
                 """Handle HTTP requests"""
-                review = await request.json()
-                return self.classify_text(review)
+                try:
+                    # Get text from request
+                    if hasattr(request, 'query_params'):
+                        # Query parameter approach
+                        text = request.query_params.get("text", "")
+                    else:
+                        # JSON body approach
+                        import json
+                        body = await request.body()
+                        data = json.loads(body)
+                        text = data.get("text", "")
+                    
+                    if not text:
+                        return {"error": "No text provided. Use ?text=your_text or send JSON with 'text' field"}
+                    
+                    # Use the model's classify_text method
+                    if hasattr(self.model_instance, 'classify_text'):
+                        result = self.model_instance.classify_text(text)
+                        return {
+                            "text": text,
+                            "predicted_label": result,
+                            "deployment_id": self.deployment_id,
+                            "stage": self.stage
+                        }
+                    else:
+                        return {"error": "Model class must have a 'classify_text' method"}
+                        
+                except Exception as e:
+                    return {"error": f"Prediction failed: {str(e)}"}
         
         # Deploy the model
         ModelDeployment.deploy()
