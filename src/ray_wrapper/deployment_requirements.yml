@@ -1,0 +1,3 @@
+required_fields: ##all required fields in the model deployment config
+  - model_class_name
+  -
