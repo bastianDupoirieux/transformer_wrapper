@@ -1,0 +1,53 @@
+# Configuration file for Ray Wrapper
+# This file defines which models to load and their available functions
+
+models:
+  # Example 1: Simple model with auto-discovered functions
+  - name: "my_deployment"
+    class_path: "testClass.MyDeployment"
+    init_params:
+      name: "World"
+    functions: []  # Empty list means auto-discover all public methods
+  
+  # Example 2: Model with specific functions only
+  - name: "text_processor"
+    class_path: "your_module.TextProcessor"
+    init_params:
+      model_path: "/path/to/model"
+      device: "cuda"
+    functions:
+      - "process_text"
+      - "summarize"
+      - "translate"
+  
+  # Example 3: Model with function name mapping
+  - name: "ml_model"
+    class_path: "ml_models.TransformerModel"
+    init_params:
+      model_name: "bert-base-uncased"
+      max_length: 512
+    functions:
+      predict: "forward"
+      encode: "encode_text"
+      classify: "classify_text"
+  
+  # Example 4: Model with complex initialization
+  - name: "custom_model"
+    class_path: "custom_models.MyCustomModel"
+    init_params:
+      config:
+        layers: 12
+        hidden_size: 768
+        num_attention_heads: 12
+      checkpoint_path: "/path/to/checkpoint.pt"
+    functions:
+      - "generate"
+      - "encode"
+      - "decode"
+      - "get_embeddings"
+
+# Global settings (optional)
+settings:
+  default_model: "my_deployment"
+  timeout: 30
+  max_batch_size: 32

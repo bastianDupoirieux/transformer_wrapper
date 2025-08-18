@@ -11,7 +11,7 @@ with open('config.yml', 'r') as stream:
 tokenizer = config['tokenizer']
 model = config['model']
 
-class ReviewClassifier:
+class Classifier:
     def __init__(self):
         self.tokenizer = AutoTokenizer.from_pretrained(tokenizer)
         self.model = DistilBertForSequenceClassification.from_pretrained(model, ignore_mismatched_sizes=True)
